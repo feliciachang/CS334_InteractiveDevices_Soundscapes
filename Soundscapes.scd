@@ -34,29 +34,22 @@ SynthDef(\birds, {|amp=0.5, shift=1|
 x = Synth(\birds);
 
 (
-SynthDef(\wildCard, {|amp1=0.5, amp2=0.2, shift1=0.2, shift2=0.3, freq1 = 10, freq2 = 500, grainDur=0.001, filterWidth, numF=0.5|
-	Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(freq1), grainDur, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift1)), numF* FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(500, 1.2, 2.1), 0.001, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2))*amp2]));
+SynthDef(\wildCard, {|amp1=0.5, amp2=0.2, shift1=0.2, shift2=0.3, freq1 = 10, freq2 = 500, grainDur1=0.001, grainDur2 = 0.001, filterWidth, numF=0.5, verblvl1=0.5, verblvl2=0.5|
+	Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(freq1), grainDur1, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift1), room:verblvl1) * amp1, numF* FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(freq2, 1.2, 2.1), grainDur2, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2), room:verblvl2)*amp2]));
 }).add;)
 
 m = Synth(\wildCard);
-m.set(\numF, 0.2);
-m.set(\shift2, 0.1);
-m.set(\amp1, 1);
-m.set(\grainDur, 0.0001);
+m.set(\numF, 0.0);
+m.set(\shift2,0.03);
+m.set(\amp1, 0.9);
+m.set(\grainDur1, 0.001);
+m.set(\freq1, 300);
+m.set(\shift1, 0.1);
+m.set(\freq2, 500);
+m.set(\amp2, 0.3);
+m.set(\grainDur2, 0.01);
 
-
-//play({BrownNoise.ar * SinGrain.ar(});
-play({HPF.ar(FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(10), 0.001, WhiteNoise.kr.range(1, 50000)))*2, 0.01, 1)), 8000)});
-
-play({FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(50, 1.2, 2.1), 0.001, BrownNoise.kr.range(1, 50000)))*2, 0.01, 1))});
-
-play({FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(10), 0.001, BrownNoise.kr.range(1, 50000)))*2, 0.01, 0.2))});
-
-/*(
-play({
-	Mix.ar(FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(10), 0.001, BrownNoise.kr.range(1, 50000))), 0.01, 0.2))+FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(1000, 1.2, 2.1), 0.001, BrownNoise.kr.range(1, 50000))), 0.01, 1)));
-})
-)*/
+//as either graiDur goes above 0.01, corresponding amp should go below 0.07
 
 
 x.set(\rQ, 0.1);
@@ -73,10 +66,3 @@ x.free;
 y= Synth(\urban);
 y.set(\shift, 1);
 y.free;
-(
-play({
-    z = Blip.ar(200, 6, 0.1);
-    PitchShift.ar(z, 0.01, 0.1, 0, 0.0001)
-}))
-
-play({Blip.ar(200, 6, 0.1)});
