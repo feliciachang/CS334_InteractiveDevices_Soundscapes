@@ -9,7 +9,6 @@ s.waitForBoot{
 		~birdSounds = Buffer.read(s, "cranes.wav".resolveRelative);
 
 
-
 		//shift must be between 0 and 4
 		SynthDef(\waves, {|amp=0.5, shift =1|
 			Out.ar(0, PitchShift.ar(PlayBuf.ar(1, ~waveSounds, loop:1)*amp, 0.01, shift)!2);
