@@ -3,10 +3,10 @@ s.boot;
 
 s.waitForBoot{
 
-	~waveSounds = Buffer.read(s, "ocean.wav".resolveRelative);
-	~urbanSounds = Buffer.read(s, "car.wav".resolveRelative);
-	~chimeSounds = Buffer.read(s, "chimes.mp3".resolveRelative);
-	~birdSounds = Buffer.read(s, "cranes.wav".resolveRelative);
+	~waveSounds = Buffer.read(s, "Ocean_Waves.wav".resolveRelative);
+	~urbanSounds = Buffer.read(s, "Times_Square.wav".resolveRelative);
+	~chimeSounds = Buffer.read(s, "Wind_Chimes.wav".resolveRelative);
+	~birdSounds = Buffer.read(s, "Bird_Songs.wav".resolveRelative);
 
 
 	//shift must be between 0 and 4
@@ -27,12 +27,11 @@ s.waitForBoot{
 	}).add;
 
 	SynthDef(\technoRainForest, {|amp1=0.5, amp2=0.2, shift1=0.2, shift2=0.3, freq1 = 10, freq2 = 500, grainDur1=0.001, grainDur2 = 0.001, numF=0.5, verblvl1=0.5, verblvl2=0.5|
-		Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(freq1), grainDur1, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift1), room:verblvl1) * amp1, numF* FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(freq2, 1.2, 2.1), grainDur2, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2), room:verblvl2)*amp2]));
+		Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((GrainSin.ar(2, Impulse.kr(freq1), grainDur1, BrownNoise.kr.range(1, 50000), 0))*3, 0.01, shift1), room:verblvl1) * amp1, numF* FreeVerb.ar(PitchShift.ar((GrainSin.ar(2, GbmanL.ar(freq2, 1.2, 2.1), grainDur2, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2), room:verblvl2)*amp2]));
 	}).add;
 
 
 	s.sync;
-	//x = Synth(\birds);
 
 	//how is it getting turn on/off data? Is python preprocessing, so msg[0] ==1 means turn on, which will never coincide with msg[1]==1, which means turn off? msg[2] is volume, msg[3] is shift
 	~chimesListener = OSCFunc( { | msg, time, addr, port |

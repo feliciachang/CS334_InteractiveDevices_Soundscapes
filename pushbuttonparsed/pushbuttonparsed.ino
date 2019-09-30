@@ -5,8 +5,8 @@ const int LeafSwitch = 23;
 const int WildSwitch = 18;
 const int iterate = 5;
 
-const int amp = 26;
-const int shift = 25;
+const int amp = 25;
+const int shift = 32;
 const int wildcardX = 27;
 const int wildcardY = 14;
 
