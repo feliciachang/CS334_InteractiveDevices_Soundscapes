@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+
 #counter thingy for joystick that increments it downward
 
 from time import sleep
-import OSC
-import serial
+import OSC # sudo pip install pyOSC
+import serial # sudo pip install pyserial
 import re
+import gpiozero as gp
+
 ser = serial.Serial('/dev/cu.SLAB_USBtoUART', 9600)
 
 enable_osc = True

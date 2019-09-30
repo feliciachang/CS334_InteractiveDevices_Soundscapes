@@ -2,20 +2,14 @@ s.quit;
 s.boot;
 
 s.waitForBoot{
-	(
+	// (
 		~waveSounds = Buffer.read(s, "ocean.wav".resolveRelative);
 		~urbanSounds = Buffer.read(s, "car.wav".resolveRelative);
-		~chimeSounds = Buffer.read(s, "chimes.MP3".resolveRelative);
+		~chimeSounds = Buffer.read(s, "chimes.mp3".resolveRelative);
 		~birdSounds = Buffer.read(s, "cranes.wav".resolveRelative);
-	)
+// );
 
-	/*(
-		~waveSounds.free;
-		~urbanSounds.free;
-		~chimeSounds.free;
-		~birdSounds.free;
-	)*/
-	(
+	// (
 		//shift must be between 0 and 4
 		SynthDef(\waves, {|amp=0.5, shift =1|
 			Out.ar(0, PitchShift.ar(PlayBuf.ar(1, ~waveSounds, loop:1)*amp, 0.01, shift)!2);
@@ -37,7 +31,8 @@ s.waitForBoot{
 			Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(freq1), grainDur1, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift1), room:verblvl1) * amp1, numF* FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(freq2, 1.2, 2.1), grainDur2, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2), room:verblvl2)*amp2]));
 	}).add;*/
 
-	)
+// );
+	s.sync;
 	//x = Synth(\birds);
 
 	//how is it getting turn on/off data? Is python preprocessing, so msg[0] ==1 means turn on, which will never coincide with msg[1]==1, which means turn off? msg[2] is volume, msg[3] is shift
@@ -83,7 +78,7 @@ s.waitForBoot{
 			~waves = Synth(\waves);
 		}
 		{msg[1] == 0} {
-			postln("else didnt work")
+			postln("else didnt work");
 			~waves.free;
 		}
 		{msg[1] == 2} {
@@ -126,7 +121,7 @@ s.waitForBoot{
 	//as either grainDur goes above 0.01, corresponding amp should go below 0.07
 
 
-	x=Synth(\birds);
+	// x=Synth(\birds);
 	/*m = Synth(\wildCard);
 	m.set(\numF, 0.0);
 	m.set(\shift2,0.03);
