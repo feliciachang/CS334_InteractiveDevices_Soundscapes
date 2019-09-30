@@ -1,0 +1,39 @@
+This document lists the sensical input ranges and the default values for the variable parameters of the /wildcard synth.
+
+numF: 0-1
+  //default: 0.5
+  
+amp1: 0.1 - 2.5
+  //default: 0.5
+  
+amp2: 0.1 - 2.5
+  //default: 0.5
+  
+shift1: 0.02 - 4
+  //default: 1
+ 
+shift2: 0.02 - 4
+  //default: 1
+
+freq1: 1 - 50
+  //default: 10
+ 
+freq2: 10- 1000
+  //default: 500
+
+grainDur1: 0.0001 - 0.1
+  //default: 0.001
+
+grainDur2: 0.0001 - 0.1
+  //default: 0.001
+
+verblvl1: 0-1
+  //default: 0.5
+
+verblvl2: 0-1
+  //default: 0.5
+
+***Suggestions for the synth:
+1. Name it "Clicks".
+2. On large change in joystick value, pick three parameters randomly and randomize their values within their
+appropriate ranges.
