@@ -3,6 +3,8 @@
 #counter thingy for joystick that increments it downward
 
 from time import sleep
+import random
+#random.randInt(0,high+1)
 import OSC # sudo pip install pyOSC
 import serial # sudo pip install pyserial
 import re
@@ -44,6 +46,24 @@ shiftResting = 2915
 # wildResting =
 
 
+trfParamVals = [0.5, 0.5, 0.5, 1, 1, 10, 500, 0.001, 0.001, 0.5, 0.5]
+
+#archetype: [index, valRangeMin, valRangeMax]
+trfNumF=[0, 0, 1]#range 0-1
+trfAmp1=[1, 0.1, 2.5]#range 0.1-2.5
+trfAmp2=[2, 0.1, 2.5]#range 0.1-2.5
+trfShift1=[3, 0.02, 4] #range 0.02 - 4
+trfShift2=[4, 0.02, 4]#range 0.02 - 4
+trfFreq1=[5, 1, 50]#range 1 - 50
+trfFreq2=[6, 10, 1000]#range 10- 1000
+trfGrainDur1=[7, 0.0001, 0.1]#range 0.0001 - 0.1
+trfGrainDur2=[8, 0.0001, 0.1]#range 0.0001 - 0.1
+trfVerbLvl1=[9, 0, 1]#range 0-1
+trfVerbLvl2=[10,0,1]#range 0-1
+trfParams = [trfNumF, trfAmp1, trfAmp2, trfShift1, trfShift2, trfFreq1, trfFreq2, \
+trfGrainDur1, trfGrainDur2, trfVerbLvl1, trfVerbLvl2]
+
+
 class SampleListener():
 	labels = ['wave_switch', 'wave_shift', 'wave_volume', \
 	'urban_switch', 'urban_shift', 'urban_volume', \
@@ -69,6 +89,8 @@ class SampleListener():
 				msg.setAddress("/Waves")
 			elif val is 3:
 				msg.setAddress("/Birds")
+			elif val is 4:
+				msg.setAddress("/TechnoRainForest")
 			for c in content:
 				msg.append(c)
 			self.osc_client.send(msg)
@@ -107,7 +129,7 @@ def main():
 			msg = []
 
 			# Send OSC messages for four main sounds
-			for i, val in enumerate(currStates[0:4]):
+			for i, val in enumerate(currStates[0:5]):
 				# turn off
 				if val is 0 and prevStates[i] is 1:
 					msg = [0, currStates[6], currStates[7]]
@@ -126,19 +148,29 @@ def main():
 					elif currStates[6] is not prevStates[6] or \
 							currStates[7] is not prevStates[7]:
 
+						if i != 4:
 
-						if currStates[6] - prevStates[6] > 1000:
-							synthParams[i][amp] += paramChange
-						elif currStates[6] - prevStates[6] < -1000:
-							synthParams[i][amp] -= paramChange
+							if currStates[6] - prevStates[6] > 1000:
+								synthParams[i][amp] += paramChange
+							elif currStates[6] - prevStates[6] < -1000:
+								synthParams[i][amp] -= paramChange
 
-						if currStates[7] - prevStates[7] > 1000:
-							synthParams[i][shift] += paramChange
-						elif currStates[7] - prevStates[7] < -1000:
-							synthParams[i][shift] -= paramChange
+							if currStates[7] - prevStates[7] > 1000:
+								synthParams[i][shift] += paramChange
+							elif currStates[7] - prevStates[7] < -1000:
+								synthParams[i][shift] -= paramChange
 
-						msg = [2, synthParams[i][amp], synthParams[i][shift]]
+							msg = [2, synthParams[i][amp], synthParams[i][shift]]
+
+						else:
+							if abs(currStates[8]-prevStates[8])>1000 or abs(currStates[9]-prevStates[9])>1000:
+								for i in range(3):
+									param = random.choice(trfParams)
+									trfParamVals[param[0]] = random.random(param[1], param[2])
+							msg = [2]
+							msg.extend(trfParamvals)
 						listener.sendOSC(i, msg)
+
 
 			if currStates[iteratorIndex] == 1:
 				for i in range(4):
