@@ -2,14 +2,14 @@ s.quit;
 s.boot;
 
 s.waitForBoot{
-	// (
+
 		~waveSounds = Buffer.read(s, "ocean.wav".resolveRelative);
 		~urbanSounds = Buffer.read(s, "car.wav".resolveRelative);
 		~chimeSounds = Buffer.read(s, "chimes.mp3".resolveRelative);
 		~birdSounds = Buffer.read(s, "cranes.wav".resolveRelative);
-// );
 
-	// (
+
+
 		//shift must be between 0 and 4
 		SynthDef(\waves, {|amp=0.5, shift =1|
 			Out.ar(0, PitchShift.ar(PlayBuf.ar(1, ~waveSounds, loop:1)*amp, 0.01, shift)!2);
@@ -27,11 +27,11 @@ s.waitForBoot{
 			Out.ar(0, PitchShift.ar(PlayBuf.ar(1, ~birdSounds, loop:1)*amp!2, 0.01, shift)!2);
 		}).add;
 
-	/*	SynthDef(\wildCard, {|amp1=0.5, amp2=0.2, shift1=0.2, shift2=0.3, freq1 = 10, freq2 = 500, grainDur1=0.001, grainDur2 = 0.001, filterWidth, numF=0.5, verblvl1=0.5, verblvl2=0.5|
+	/*	SynthDef(\wildCard, {|amp1=0.5, amp2=0.2, shift1=0.2, shift2=0.3, freq1 = 10, freq2 = 500, grainDur1=0.001, grainDur2 = 0.001, numF=0.5, verblvl1=0.5, verblvl2=0.5|
 			Out.ar(0, Mix.ar([FreeVerb.ar(PitchShift.ar((SinGrain.ar(Impulse.kr(freq1), grainDur1, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift1), room:verblvl1) * amp1, numF* FreeVerb.ar(PitchShift.ar((SinGrain.ar(GbmanL.ar(freq2, 1.2, 2.1), grainDur2, BrownNoise.kr.range(1, 50000)))*3, 0.01, shift2), room:verblvl2)*amp2]));
 	}).add;*/
 
-// );
+
 	s.sync;
 	//x = Synth(\birds);
 
