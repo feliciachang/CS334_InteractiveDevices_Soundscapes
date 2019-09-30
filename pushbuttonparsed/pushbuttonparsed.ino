@@ -1,22 +1,22 @@
-const int TreeButton = 0;
+const int ChimeButton = 21;
 const int CarSwitch = 22;
-const int WaveButton = 21;
-const int LeafSwitch = 0;
-const int WildSwitch = 0;
-const int iterate = 0;
+const int WaveButton = 19;
+const int LeafSwitch = 23;
+const int WildSwitch = 18;
+const int iterate = 5;
 
-const int amp = 25;
-const int shift = 26;
-const int wildcardX = 0;
-const int wildcardY = 0;
+const int amp = 26;
+const int shift = 25;
+const int wildcardX = 27;
+const int wildcardY = 14;
 
-int TreeButtonState = 0;
+int ChimeButtonState = 0;
 int WaveButtonState = 0;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  pinMode(TreeButton, INPUT_PULLUP);
+  pinMode(ChimeButton, INPUT_PULLUP);
   pinMode(CarSwitch, INPUT_PULLUP);
   pinMode(WaveButton, INPUT_PULLUP);
   pinMode(LeafSwitch, INPUT_PULLUP);
@@ -37,14 +37,14 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  if (digitalRead(TreeButton) == HIGH) {
-    TreeButtonState = !TreeButtonState;
+  if (digitalRead(ChimeButton) == LOW) {
+    ChimeButtonState = !ChimeButtonState;
   }
-  Serial.print(!TreeButtonState);
+  Serial.print(ChimeButtonState);
   Serial.print("--");
 
   int CarSwitchState = digitalRead(CarSwitch);
-  Serial.print(CarSwitchState);
+  Serial.print(!CarSwitchState);
   Serial.print("--");
 
   if (digitalRead(WaveButton) == LOW) {
@@ -54,15 +54,15 @@ void loop() {
   Serial.print("--");
 
   int LeafSwitchState = digitalRead(LeafSwitch);
-  Serial.print(LeafSwitchState);
+  Serial.print(!LeafSwitchState);
   Serial.print("--");
 
   int WildSwitchState = digitalRead(WildSwitch);
-  Serial.print(WildSwitchState);
+  Serial.print(!WildSwitchState);
   Serial.print("--");
 
   int iterateState = digitalRead(iterate);
-  Serial.print(iterateState);
+  Serial.print(!iterateState);
   Serial.print("--");
 
   int ampState = analogRead(amp);
@@ -80,7 +80,7 @@ void loop() {
   int wildcardYstate = analogRead(wildcardY);
   Serial.println(wildcardYstate);
 
-  delay(1000);
+  delay(500);
 
 }
 

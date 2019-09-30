@@ -12,7 +12,7 @@ ser = serial.Serial('/dev/cu.SLAB_USBtoUART', 9600)
 
 enable_osc = True
 
-# tree, car, wave, leaf
+# chime, car, wave, leaf
 # wildcard, iterate
 # amp, shift, wildX, wildY
 
@@ -28,18 +28,20 @@ currStates = [0, 0, 0, 0, \
 			 0, 0, \
 			 0, 0, 0, 0]
 
-#treeAmp, treeShift, carAmp, carShift, waveAmp, waveShift, leafAmp, leafShift
+#chimeAmp, chimeShift, carAmp, carShift, waveAmp, waveShift, leafAmp, leafShift
 synthParams = [[0.5, 1],[0.5, 1],[0.5, 1],[0.5, 1]]
-tree=0
-car=1
-wave=2
-leaf=3
-amp=0
-shift=1
+chimes = 0; car = 1; wave = 2; leaf = 3
+tr = 4; iteratorIndex = 5;
+amp = 0; shift = 1
+
 
 paramChange = 0.1
 
 iterator = -1
+
+ampResting = 2675
+shiftResting = 2915
+# wildResting =
 
 
 class SampleListener():
@@ -60,9 +62,9 @@ class SampleListener():
 		if enable_osc:
 			msg = OSC.OSCMessage()
 			if val is 0:
-				msg.setAddress("/Trees")
+				msg.setAddress("/Chimes")
 			elif val is 1:
-				msg.setAddress("/Cars")
+				msg.setAddress("/Urban")
 			elif val is 2:
 				msg.setAddress("/Waves")
 			elif val is 3:
@@ -79,14 +81,14 @@ def parseSerial(serialData):
 		parsed.append(int(val))
 	return parsed
 
-# def findDiffs(prev, curr):
-# 	for old, new in prev, curr:
-# 		if old is not new:
-
+def resetParams(i):
+	synthParams[i][amp] = 0.5
+	synthParams[i][shift] = 1
 
 def main():
 	global currStates
 	global prevStates
+	global iterator
 
 	c = OSC.OSCClient()
 	c.connect(('127.0.0.1', 57122))
@@ -98,38 +100,33 @@ def main():
 		try:
 			# print("trying to receive data")
 			serialData = ser.readline()
-			print("serialData")
 			print(serialData)
 			prevStates = currStates
 			currStates = parseSerial(serialData)
-			# print(prevStates)
-			# print(currStates)
 
 			msg = []
 
 			# Send OSC messages for four main sounds
 			for i, val in enumerate(currStates[0:4]):
-				#turn off
+				# turn off
 				if val is 0 and prevStates[i] is 1:
 					msg = [0, currStates[6], currStates[7]]
 					listener.sendOSC(i, msg)
-					print(msg)
 
 				if val is 1:
-					# just changed states
+					# turn on
 					if prevStates[i] is 0:
-						# send message for that state
-						#turn on
-						iterator=i
-						synthParams[i][amp]=0.5
-						synthParams[i][shift]=1
-						msg = [1, synthParams[i][amp], synthParams[i][shift]
+
+						iterator = i
+						resetParams(i)
+						msg = [1, synthParams[i][amp], synthParams[i][shift]]
 						listener.sendOSC(i, msg)
 						print(msg)
+					# sustain
 					elif currStates[6] is not prevStates[6] or \
 							currStates[7] is not prevStates[7]:
 
-						#sustain
+
 						if currStates[6] - prevStates[6] > 1000:
 							synthParams[i][amp] += paramChange
 						elif currStates[6] - prevStates[6] < -1000:
@@ -142,13 +139,12 @@ def main():
 
 						msg = [2, synthParams[i][amp], synthParams[i][shift]]
 						listener.sendOSC(i, msg)
-						print(msg)
-			if currStates[5] == 1:
+
+			if currStates[iteratorIndex] == 1:
 				for i in range(4):
 					iterator = (iterator+1)%4
 					if currStates[iterator] == 1:
 						break
-
 
 
 			# listener.sendBirdOSC("header", currStates)

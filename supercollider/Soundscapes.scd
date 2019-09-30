@@ -39,34 +39,39 @@ s.waitForBoot{
 	~chimesListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
 		postln(msg);
-		if(asInt(msg[1]) == 1, {
-			postln("entered if");
+		case
+		{msg[1] == 1} {
+			postln("ON");
 			~chimes = Synth(\chimes);
-			//~chimes.set(\amp, msg[1]);
-			//~chimes.set(\shift, msg[2]);
-		},
-		{
-			postln("else didn't work");
+		}
+		{msg[1] == 0} {
+			postln("OFF");
 			~chimes.free;
-		});
+		}
+		{msg[1] == 2} {
+			postln("SUSTAIN");
+			~chimes.set(\amp, msg[1]);
+			~chimes.set(\shift, msg[2]);
+		};
 	}, '\Chimes', recvPort: 57122);
 
 	~urbanListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
 		postln(msg);
-		if(asInt(msg[1]) == 1, {
-			postln("entered if");
+		case
+		{msg[1] == 1} {
+			postln("ON");
 			~urban = Synth(\urban);
-			//~urban.set(\amp, msg[1]);
-			//~urban.set(\shift, msg[2]);
-		},
-		{if (msg[1] == 0, {
-			postln("else didn't work");
+		}
+		{msg[1] == 0} {
+			postln("OFF");
 			~urban.free;
-		}, {
+		}
+		{msg[1] == 2} {
+			postln("SUSTAIN");
 			~urban.set(\amp, msg[1]);
 			~urban.set(\shift, msg[2]);
-		})});
+		};
 	}, '\Urban', recvPort: 57122);
 
 	~wavesListener = OSCFunc( { | msg, time, addr, port |
@@ -74,48 +79,38 @@ s.waitForBoot{
 		postln(msg);
 		case
 		{msg[1] == 1} {
-			postln("entered if");
+			postln("ON");
 			~waves = Synth(\waves);
 		}
 		{msg[1] == 0} {
-			postln("else didnt work");
+			postln("OFF");
 			~waves.free;
 		}
 		{msg[1] == 2} {
+			postln("SUSTAIN");
 			~waves.set(\amp, msg[1]);
 			~waves.set(\shift, msg[2]);
 		};
 	}, '\Waves', recvPort: 57122);
 
 
-
-/*		if(asInt(msg[1]) == 1, {
-			postln("entered if");
-			~waves = Synth(\waves);
-			//~urban.set(\amp, msg[1]);
-			//~urban.set(\shift, msg[2]);
-		},
-		{if(msg[1] == 0, {
-			postln("else didn't work");
-			~waves.free;
-		}, {
-			~waves.set(\amp, msg[1]);
-			~waves.set(\shift, msg[2]);
-		})});*/
-
 	~birdsListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
 		postln(msg);
-		if(asInt(msg[1]) == 1, {
-			postln("entered if");
+		case
+		{msg[1] == 1} {
+			postln("ON");
 			~birds = Synth(\birds);
-			//~birds.set(\amp, msg[1]);
-			//~birds.set(\shift, msg[2]);
-		},
-		{
-			postln("else didn't work");
+		}
+		{msg[1] == 0} {
+			postln("OFF");
 			~birds.free;
-		});
+		}
+		{msg[1] == 2} {
+			postln("SUSTAIN");
+			~birds.set(\amp, msg[1]);
+			~birds.set(\shift, msg[2]);
+		};
 	}, '\Birds', recvPort: 57122);
 
 	//as either grainDur goes above 0.01, corresponding amp should go below 0.07
