@@ -14,18 +14,18 @@ ser = serial.Serial('/dev/cu.SLAB_USBtoUART', 9600)
 
 enable_osc = True
 
-# Uses BCM pin numbering
-# chimePin = 17
-# carPin = 18
-# wavePin = 22
-# leafPin = 23
-# trPin = 27
-#
-# chimeLED = gp.LED(chimePin)
-# carLED = gp.LED(carPin)
-# waveLED = gp.LED(wavePin)
-# leafLED = gp.LED(leafPin)
-# trLED = gp.LED(trPin)
+Uses BCM pin numbering
+chimePin = 17
+carPin = 18
+wavePin = 22
+leafPin = 23
+trfPin = 27
+
+chimeLED = gp.LED(chimePin)
+carLED = gp.LED(carPin)
+waveLED = gp.LED(wavePin)
+leafLED = gp.LED(leafPin)
+trfLED = gp.LED(trfPin)
 
 # chime, car, wave, leaf
 # wildcard, iterate
@@ -120,6 +120,38 @@ def resetParams(i):
 	synthParams[i][amp] = 0.5
 	synthParams[i][shift] = 1
 
+def turnOnLED(led):
+    if led is 0:
+        chimeLED.on()
+        carLED.off()
+        waveLED.off()
+        leafLED.off()
+		trfLED.off()
+    elif led is 1:
+        chimeLED.off()
+        carLED.on()
+        waveLED.off()
+        leafLED.off()
+		trfLED.off()
+    elif led is 2:
+        chimeLED.off()
+        carLED.off()
+        waveLED.on()
+        leafLED.off()
+		trfLED.off()
+    elif led is 3:
+        chimeLED.off()
+        carLED.off()
+        waveLED.off()
+        leafLED.on()
+		trfLED.off()
+    elif led is 4:
+        chimeLED.off()
+        carLED.off()
+        waveLED.off()
+        leafLED.off()
+		trfLED.on()
+
 def main():
 	global currStates
 	global prevStates
@@ -145,12 +177,10 @@ def main():
 
 	while True:
 		try:
-			# print("trying to receive data")
 			serialData = ser.readline()
 			print(serialData)
 			prevStates = currStates
 			currStates = parseSerial(serialData)
-			# print('curr', currStates[4])
 
 			msg = []
 
@@ -166,7 +196,7 @@ def main():
 					if prevStates[i] is 0:
 
 						iterator = i
-
+						turnOnLED(i)
 						if i is 4:
 							msg = [1]
 							msg.extend(trfParamVals)
@@ -176,7 +206,6 @@ def main():
 
 						listener.sendOSC(i, msg)
 						print(msg)
-						print('turned on')
 					# sustain
 					elif currStates[6] is not prevStates[6] or \
 							currStates[7] is not prevStates[7]:
@@ -217,6 +246,7 @@ def main():
 				for i in range(4):
 					iterator = (iterator+1)%4
 					if currStates[iterator] == 1:
+						turnOnLED(i)
 						break
 
 
