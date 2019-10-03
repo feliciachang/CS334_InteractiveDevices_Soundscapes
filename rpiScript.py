@@ -117,8 +117,9 @@ class SampleListener():
 
 def parseSerial(serialData):
 	splitSerial = str(serialData, 'utf-8')
+	#print(splitSerial)
+	splitSerial = splitSerial.split('--')
 	print(splitSerial)
-	splitSetial = splitSerial.split('--')
 	parsed = []
 	for val in splitSerial:
 		parsed.append(int(val))
