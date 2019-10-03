@@ -183,9 +183,9 @@ def main():
 	while True:
 		try:
 			serialData = ser.readline()
-			print(serialData)
 			prevStates = currStates
 			currStates = parseSerial(serialData)
+			print(currStates)
 
 			msg = []
 
