@@ -182,88 +182,90 @@ def main():
 
 	listener = SampleListener()
 	#listener.add_osc_connect(c)
-
 	while True:
-	        try:
-                turnOnLED(i)
-                print("starting code")
-		        serialData = ser.readline()
-		        print(serialData)
-		        prevStates = currStates
-		        currStates = parseSerial(serialData)
+		print("work")
 
-			msg = []
-
-			# Send OSC messages for four main sounds
-			for i, val in enumerate(currStates[0:5]):
-				# turn off
-				if val is 0 and prevStates[i] is 1:
-					msg = [0, currStates[6], currStates[7]]
-					listener.sendOSC(i, msg)
-
-				if val is 1:
-					# turn on
-					if prevStates[i] is 0:
-
-						iterator = i
-						turnOnLED(i)
-						if i is 4:
-							msg = [1]
-							msg.extend(trfParamVals)
-						else:
-							resetParams(i)
-							msg = [1, synthParams[i][amp], synthParams[i][shift]]
-
-						listener.sendOSC(i, msg)
-						print(msg)
-					# sustain
-					elif currStates[6] is not prevStates[6] or \
-							currStates[7] is not prevStates[7]:
-
-						if i is not 4:
-
-							if currStates[6] - ampResting > 1000:
-								if synthParams[i][amp] < 1:
-									print('amp', synthParams[i][amp])
-									synthParams[i][amp] += paramChange
-							elif currStates[6] - ampResting < -1000:
-								if synthParams[i][amp] > 0:
-									print('amp', synthParams[i][amp])
-									synthParams[i][amp] -= paramChange
-
-							if currStates[7] - shiftResting > 1000:
-								if synthParams[i][shift] < 4:
-									print('shift', synthParams[i][shift])
-									synthParams[i][shift] += paramChange
-							elif currStates[7] - shiftResting < -1000:
-								if synthParams[i][shift] > 0:
-									print('shift', synthParams[i][shift])
-									synthParams[i][shift] -= paramChange
-
-							msg = [2, synthParams[i][amp], synthParams[i][shift]]
-
-						else:
-							if abs(currStates[8]-prevStates[8])>1000 or abs(currStates[9]-prevStates[9])>1000:
-								for i in range(7):
-									param = random.choice(trfParams)
-									trfParamVals[param[0]] = random.uniform(param[1], param[2])
-							msg = [2]
-							msg.extend(trfParamVals)
-						listener.sendOSC(i, msg)
-
-
-			if currStates[iteratorIndex] == 1:
-				for i in range(4):
-					iterator = (iterator+1)%4
-					if currStates[iterator] == 1:
-						turnOnLED(i)
-						break
-
-
-			# listener.sendBirdOSC("header", currStates)
-			# print("received data")
-		except Exception as e:
-			print(e)
+	# while True:
+	# 		try:
+    #         	turnOnLED(i)
+    #         	print("starting code")
+	#         # serialData = ser.readline()
+	#         # print(serialData)
+	# 		# prevStates = currStates
+	# 	    # currStates = parseSerial(serialData)
+	# 		#
+	# 		# msg = []
+	# 		#
+	# 		# # Send OSC messages for four main sounds
+	# 		# for i, val in enumerate(currStates[0:5]):
+	# 		# 	# turn off
+	# 		# 	if val is 0 and prevStates[i] is 1:
+	# 		# 		msg = [0, currStates[6], currStates[7]]
+	# 		# 		listener.sendOSC(i, msg)
+	# 		#
+	# 		# 	if val is 1:
+	# 		# 		# turn on
+	# 		# 		if prevStates[i] is 0:
+	# 		#
+	# 		# 			iterator = i
+	# 		# 			turnOnLED(i)
+	# 		# 			if i is 4:
+	# 		# 				msg = [1]
+	# 		# 				msg.extend(trfParamVals)
+	# 		# 			else:
+	# 		# 				resetParams(i)
+	# 		# 				msg = [1, synthParams[i][amp], synthParams[i][shift]]
+	# 		#
+	# 		# 			listener.sendOSC(i, msg)
+	# 		# 			print(msg)
+	# 		# 		# sustain
+	# 		# 		elif currStates[6] is not prevStates[6] or \
+	# 		# 				currStates[7] is not prevStates[7]:
+	# 		#
+	# 		# 			if i is not 4:
+	# 		#
+	# 		# 				if currStates[6] - ampResting > 1000:
+	# 		# 					if synthParams[i][amp] < 1:
+	# 		# 						print('amp', synthParams[i][amp])
+	# 		# 						synthParams[i][amp] += paramChange
+	# 		# 				elif currStates[6] - ampResting < -1000:
+	# 		# 					if synthParams[i][amp] > 0:
+	# 		# 						print('amp', synthParams[i][amp])
+	# 		# 						synthParams[i][amp] -= paramChange
+	# 		#
+	# 		# 				if currStates[7] - shiftResting > 1000:
+	# 		# 					if synthParams[i][shift] < 4:
+	# 		# 						print('shift', synthParams[i][shift])
+	# 		# 						synthParams[i][shift] += paramChange
+	# 		# 				elif currStates[7] - shiftResting < -1000:
+	# 		# 					if synthParams[i][shift] > 0:
+	# 		# 						print('shift', synthParams[i][shift])
+	# 		# 						synthParams[i][shift] -= paramChange
+	# 		#
+	# 		# 				msg = [2, synthParams[i][amp], synthParams[i][shift]]
+	# 		#
+	# 		# 			else:
+	# 		# 				if abs(currStates[8]-prevStates[8])>1000 or abs(currStates[9]-prevStates[9])>1000:
+	# 		# 					for i in range(7):
+	# 		# 						param = random.choice(trfParams)
+	# 		# 						trfParamVals[param[0]] = random.uniform(param[1], param[2])
+	# 		# 				msg = [2]
+	# 		# 				msg.extend(trfParamVals)
+	# 		# 			listener.sendOSC(i, msg)
+	# 		#
+	# 		#
+	# 		# if currStates[iteratorIndex] == 1:
+	# 		# 	for i in range(4):
+	# 		# 		iterator = (iterator+1)%4
+	# 		# 		if currStates[iterator] == 1:
+	# 		# 			turnOnLED(i)
+	# 					break
+	#
+	#
+	# 		# listener.sendBirdOSC("header", currStates)
+	# 		# print("received data")
+	# 	except Exception as e:
+	# 		print(e)
 
 if __name__ == "__main__":
 	main()
