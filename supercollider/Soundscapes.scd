@@ -50,7 +50,7 @@ s.waitForBoot{
 			~chimes.set(\amp, msg[1]);
 			~chimes.set(\shift, msg[2]);
 		};
-	}, '\Chimes', recvPort: 57122);
+	}, '\Chimes', recvPort: 5001);
 
 	~urbanListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
@@ -69,7 +69,7 @@ s.waitForBoot{
 			~urban.set(\amp, msg[1]);
 			~urban.set(\shift, msg[2]);
 		};
-	}, '\Urban', recvPort: 57122);
+	}, '\Urban', recvPort: 5001);
 
 	~wavesListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
@@ -88,7 +88,7 @@ s.waitForBoot{
 			~waves.set(\amp, msg[1]);
 			~waves.set(\shift, msg[2]);
 		};
-	}, '\Waves', recvPort: 57122);
+	}, '\Waves', recvPort: 5001);
 
 
 	~birdsListener = OSCFunc( { | msg, time, addr, port |
@@ -108,7 +108,7 @@ s.waitForBoot{
 			~birds.set(\amp, msg[1]);
 			~birds.set(\shift, msg[2]);
 		};
-	}, '\Birds', recvPort: 57122);
+	}, '\Birds', recvPort: 5001);
 
 	~tRFListener = OSCFunc( { | msg, time, addr, port |
 		postln("OSC received in SC");
@@ -136,7 +136,7 @@ s.waitForBoot{
 			~tRF.set(\verblvl1, msg[11]);
 			~tRF.set(\verblvl2, msg[12]);
 		};
-	}, '/TechnoRainForest', recvPort: 57122);
+	}, '/TechnoRainForest', recvPort: 5001);
 
 	//as either grainDur goes above 0.01, corresponding amp should go below 0.07
 
