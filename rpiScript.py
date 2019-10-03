@@ -102,7 +102,7 @@ class SampleListener():
 
 	def sendOSC(self, val, content):
 		if enable_osc:
-		
+
 			if val is 0:
 				label = "/Chimes"
 			elif val is 1:
@@ -113,7 +113,7 @@ class SampleListener():
 				label = "/Birds"
 			elif val is 4:
 				label = "/TechnoRainForest"
-		    
+
 		client.send_message(label, content)
 
 
@@ -185,8 +185,8 @@ def main():
 
 	while True:
 	        try:
-                        turnOnLED(i)
-                        print("starting code")
+                turnOnLED(i)
+                print("starting code")
 		        serialData = ser.readline()
 		        print(serialData)
 		        prevStates = currStates
