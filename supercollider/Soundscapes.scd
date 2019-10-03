@@ -1,4 +1,3 @@
-s.quit;
 s.boot;
 
 s.waitForBoot{
