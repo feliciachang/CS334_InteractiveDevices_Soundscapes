@@ -5,16 +5,25 @@
 from time import sleep
 import random
 #random.randInt(0,high+1)
-import OSC # sudo pip install pyOSC
+import sys
+sys.path.insert(1, '/home/pi/pyosc')
+from pythonosc.dispatcher import Dispatcher
+dispatcher = Dispatcher()
+from pythonosc.osc_server import BlockingOSCUDPServer
+from pythonosc.udp_client import SimpleUDPClient
+server = BlockingOSCUDPServer(("127.0.0.1", 57122), dispatcher)
+client = SimpleUDPClient("127.0.0.1", 57122)
 import serial # sudo pip install pyserial
 import re
 import gpiozero as gp
 
-ser = serial.Serial('/dev/cu.SLAB_USBtoUART', 9600)
+ser = serial.Serial('/dev/ttyAMA0', 9600)
+
+#dispatcher = Dispatcher()
 
 enable_osc = True
 
-Uses BCM pin numbering
+# Uses BCM pin numbering
 chimePin = 17
 carPin = 18
 wavePin = 22
@@ -85,28 +94,27 @@ class SampleListener():
 	'wildcard_switch', 'wildcard_shift', 'wildcard_volume']
 	#
 
-	osc_client = None
+	#osc_client = None
 
-	def add_osc_connect(self, client_connection):
-		self.osc_client = client_connection
-		print(self.osc_client)
+	#def add_osc_connect(self, client_connection):
+	#	self.osc_client = client_connection
+	#	print(self.osc_client)
 
 	def sendOSC(self, val, content):
 		if enable_osc:
-			msg = OSC.OSCMessage()
+		
 			if val is 0:
-				msg.setAddress("/Chimes")
+				label = "/Chimes"
 			elif val is 1:
-				msg.setAddress("/Urban")
+				label = "/Urban"
 			elif val is 2:
-				msg.setAddress("/Waves")
+				label = "/Waves"
 			elif val is 3:
-				msg.setAddress("/Birds")
+				label = "/Birds"
 			elif val is 4:
-				msg.setAddress("/TechnoRainForest")
-			for c in content:
-				msg.append(c)
-			self.osc_client.send(msg)
+				label = "/TechnoRainForest"
+		    
+		client.send_message(label, content)
 
 
 def parseSerial(serialData):
@@ -126,31 +134,31 @@ def turnOnLED(led):
         carLED.off()
         waveLED.off()
         leafLED.off()
-		trfLED.off()
+        #trfLED.off()
     elif led is 1:
         chimeLED.off()
         carLED.on()
         waveLED.off()
         leafLED.off()
-		trfLED.off()
+        #trfLED.off()
     elif led is 2:
         chimeLED.off()
         carLED.off()
         waveLED.on()
         leafLED.off()
-		trfLED.off()
+        #trfLED.off()
     elif led is 3:
         chimeLED.off()
         carLED.off()
         waveLED.off()
         leafLED.on()
-		trfLED.off()
+        #trfLED.off()
     elif led is 4:
         chimeLED.off()
         carLED.off()
         waveLED.off()
         leafLED.off()
-		trfLED.on()
+        #trfLED.on()
 
 def main():
 	global currStates
@@ -169,18 +177,20 @@ def main():
 	global trfVerbLvl2
 	global trfParams
 
-	c = OSC.OSCClient()
-	c.connect(('127.0.0.1', 57122))
+	#c = OSCClient()
+	#c.connect(('127.0.0.1', 57122))
 
 	listener = SampleListener()
-	listener.add_osc_connect(c)
+	#listener.add_osc_connect(c)
 
 	while True:
-		try:
-			serialData = ser.readline()
-			print(serialData)
-			prevStates = currStates
-			currStates = parseSerial(serialData)
+	        try:
+                        turnOnLED(i)
+                        print("starting code")
+		        serialData = ser.readline()
+		        print(serialData)
+		        prevStates = currStates
+		        currStates = parseSerial(serialData)
 
 			msg = []
 
