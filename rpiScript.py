@@ -185,6 +185,7 @@ def main():
 	while True:
 		try:
 			turnOnLED(0)
+			sys.exit()
 		except:
 			print("fail")
 
