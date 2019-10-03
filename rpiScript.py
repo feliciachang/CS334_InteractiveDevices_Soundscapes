@@ -119,7 +119,6 @@ def parseSerial(serialData):
 	splitSerial = str(serialData, 'utf-8')
 	#print(splitSerial)
 	splitSerial = splitSerial.split('--')
-	print(splitSerial)
 	parsed = []
 	for val in splitSerial:
 		parsed.append(int(val))
