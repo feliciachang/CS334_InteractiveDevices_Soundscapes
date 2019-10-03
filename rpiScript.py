@@ -5,14 +5,14 @@
 from time import sleep
 import random
 #random.randInt(0,high+1)
-import sys
-sys.path.insert(1, '/home/pi/pyosc')
-from pythonosc.dispatcher import Dispatcher
-dispatcher = Dispatcher()
-from pythonosc.osc_server import BlockingOSCUDPServer
-from pythonosc.udp_client import SimpleUDPClient
-server = BlockingOSCUDPServer(("127.0.0.1", 57122), dispatcher)
-client = SimpleUDPClient("127.0.0.1", 57122)
+# import sys
+# sys.path.insert(1, '/home/pi/pyosc')
+# from pythonosc.dispatcher import Dispatcher
+# dispatcher = Dispatcher()
+# from pythonosc.osc_server import BlockingOSCUDPServer
+# from pythonosc.udp_client import SimpleUDPClient
+# server = BlockingOSCUDPServer(("127.0.0.1", 57122), dispatcher)
+# client = SimpleUDPClient("127.0.0.1", 57122)
 import serial # sudo pip install pyserial
 import re
 import gpiozero as gp
