@@ -183,7 +183,11 @@ def main():
 	listener = SampleListener()
 	#listener.add_osc_connect(c)
 	while True:
-		print("work")
+		try: 
+                    turnOnLED(i)
+                    print("starting")
+                except Exception as e:
+                    print("error")
 
 	# while True:
 	# 		try:
