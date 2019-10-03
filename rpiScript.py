@@ -184,8 +184,9 @@ def main():
 	#listener.add_osc_connect(c)
 	while True:
 		try:
-			turnOnLED(0)
-			sys.exit()
+			print("something")
+			serialData = ser.readline()
+			print(serialData)
 		except:
 			print("fail")
 
